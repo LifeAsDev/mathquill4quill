@@ -1,6 +1,6 @@
 import $ from "jquery";
 import katex from "katex";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import ReactQuill, { Quill } from "react-quill";
 
 if (typeof window !== "undefined") {
@@ -10,43 +10,37 @@ if (typeof window !== "undefined") {
   require("@edtr-io/mathquill/build/mathquill.js");
 }
 
-class QuillEditor extends React.Component {
-  constructor(props) {
-    super(props);
-    this.reactQuill = React.createRef();
-    this.attachQuillRefs = this.attachQuillRefs.bind(this);
-    this.didAttachQuillRefs = false;
-  }
+const QuillEditor= ({ options }) => {
+  const reactQuillRef = useRef(null);
+  const didAttachQuillRefs = useRef(false);
 
-  componentDidMount() {
-    if (!this.didAttachQuillRefs) {
-      this.attachQuillRefs();
-      this.didAttachQuillRefs = true;
+  useEffect(() => {
+    if (!didAttachQuillRefs.current) {
+      attachQuillRefs();
+      didAttachQuillRefs.current = true;
     }
-  }
+  }, []);
 
-  attachQuillRefs() {
+  const attachQuillRefs = () => {
     const enableMathQuillFormulaAuthoring = window.mathquill4quill({ Quill, katex });
     enableMathQuillFormulaAuthoring(
-      this.reactQuill.current.editor,
-      this.props.options
+      reactQuillRef.current?.getEditor(),
+      options
     );
-  }
+  };
 
-  render() {
-    return (
-      <ReactQuill
-        ref={this.reactQuill}
-        modules={{
-          formula: true,
-          toolbar: [["video", "bold", "italic", "underline", "formula"]]
-        }}
-        theme={"snow"}
-        placeholder={"Compose an epic ..."}
-        bounds={".quill"}
-      />
-    );
-  }
-}
+  return (
+    <ReactQuill
+      ref={reactQuillRef}
+      modules={{
+        formula: true,
+        toolbar: [["bold", "italic", "underline", "formula"]]
+      }}
+      theme="snow"
+      placeholder="Compose an epic ..."
+      bounds=".quill"
+    />
+  );
+};
 
 export default QuillEditor;

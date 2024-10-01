@@ -16,7 +16,18 @@ const CUSTOM_OPERATORS = [
 ];
 
 export default function Home() {
-  const [operators, setOperators] = useState([]);
+  const [operators, setOperators] = useState([
+    ["\\pm", "\\pm"],
+    ["\\sqrt{x}", "\\sqrt"],
+    ["\\sqrt[3]{x}", "\\sqrt[3]{}"],
+    ["\\sqrt[n]{x}", "\\nthroot"],
+    ["\\frac{x}{y}", "\\frac"],
+    ["\\sum^{s}_{x}{d}", "\\sum"],
+    ["\\prod^{s}_{x}{d}", "\\prod"],
+    ["\\coprod^{s}_{x}{d}", "\\coprod"],
+    ["\\int^{s}_{x}{d}", "\\int"],
+    ["\\binom{n}{k}", "\\binom"]
+  ]);
   const [displayHistory, setDisplayHistory] = useState(false);
 
   const toggleDisplayHistory = event => {
